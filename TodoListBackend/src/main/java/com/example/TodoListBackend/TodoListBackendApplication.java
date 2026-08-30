@@ -1,0 +1,14 @@
+package com.example.TodoListBackend;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class TodoListBackendApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(TodoListBackendApplication.class, args);
+		System.out.println("Successfully running");
+	}
+
+}
