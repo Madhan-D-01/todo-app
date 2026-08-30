@@ -1,0 +1,179 @@
+/* login.css */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: linear-gradient(135deg, #fff5f5, #ffffff);
+}
+
+/* Main container */
+.container {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+/* Login card */
+.login-box {
+    width: 100%;
+    max-width: 420px;
+    background: #ffffff;
+    padding: 40px 35px;
+    border-radius: 18px;
+    box-shadow: 0 15px 45px rgba(190, 0, 0, 0.15);
+    border: 1px solid #ffe0e0;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Red top decoration */
+.login-box::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 6px;
+    background: #dc3545;
+}
+
+/* Heading */
+.login-box h2 {
+    text-align: center;
+    color: #dc3545;
+    font-size: 32px;
+    margin-bottom: 30px;
+    font-weight: 700;
+}
+
+/* Input wrapper */
+.login-box>div {
+    margin-bottom: 18px;
+}
+
+/* Normal inputs */
+.login-box input {
+    width: 100%;
+    height: 50px;
+    padding: 0 15px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    outline: none;
+    font-size: 15px;
+    color: #333;
+    background: #fff;
+    transition: 0.3s ease;
+}
+
+.login-box input::placeholder {
+    color: #999;
+}
+
+/* Input focus */
+.login-box input:focus {
+    border-color: #dc3545;
+    box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
+}
+
+/* Password field */
+.password-field {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-field input {
+    padding-right: 50px;
+}
+
+/* Eye button */
+.password-field button {
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 42px;
+    height: 42px;
+    border: none;
+    background: transparent;
+    color: #dc3545;
+    cursor: pointer;
+    font-size: 18px;
+    border-radius: 8px;
+    transition: 0.2s ease;
+}
+
+.password-field button:hover {
+    background: #fff0f1;
+}
+
+/* Login button */
+.login-box .btn {
+    width: 100%;
+    height: 50px;
+    border: none;
+    border-radius: 10px;
+    background: #dc3545;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.login-box .btn:hover {
+    background: #bb2d3b;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(220, 53, 69, 0.25);
+}
+
+.login-box .btn:active {
+    transform: translateY(0);
+}
+
+/* Signup section */
+.login-box p {
+    display: inline;
+    color: #777;
+    font-size: 14px;
+    margin-right: 5px;
+}
+
+.login-box a {
+    color: #dc3545;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.login-box a:hover {
+    text-decoration: underline;
+}
+
+.signup-text {
+    text-align: center;
+    margin-top: 5px;
+}
+
+.signup-text p {
+    margin-right: 5px;
+}
+
+
+/* Responsive */
+@media (max-width: 480px) {
+    .login-box {
+        padding: 35px 25px;
+    }
+
+    .login-box h2 {
+        font-size: 28px;
+    }
+}

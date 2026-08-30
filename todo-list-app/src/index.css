@@ -1,0 +1,481 @@
+/* ================================
+   Global Styles
+================================ */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: linear-gradient(135deg, #fff5f5, #ffffff);
+    min-height: 100vh;
+}
+
+
+/* ================================
+   Main Container
+================================ */
+
+.todo-container {
+    width: 90%;
+    max-width: 600px;
+    margin: 60px auto;
+    padding: 35px;
+
+    background: #ffffff;
+
+    border-radius: 18px;
+
+    box-shadow:
+        0 15px 45px rgba(190, 0, 0, 0.15);
+
+    border: 1px solid #ffe0e0;
+
+    position: relative;
+
+    overflow: hidden;
+}
+
+
+/* Red top decoration */
+
+.todo-container::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 6px;
+
+    background: #dc3545;
+}
+
+
+/* ================================
+   Heading
+================================ */
+
+.todo-container h1 {
+    text-align: center;
+
+    margin-bottom: 25px;
+
+    color: #dc3545;
+
+    font-size: 32px;
+
+    font-weight: 700;
+}
+
+
+/* ================================
+   Input Section
+================================ */
+
+.input-section {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 10px;
+
+    margin-bottom: 20px;
+}
+
+
+/* Task input */
+
+.input-section input[type="text"] {
+    flex: 1 1 100%;
+}
+
+
+/* Date inputs */
+
+.input-section input[type="date"] {
+    flex: 1;
+
+    min-width: 0;
+}
+
+
+/* All inputs */
+
+.input-section input {
+    height: 50px;
+
+    padding: 0 15px;
+
+    font-size: 15px;
+
+    color: #333;
+
+    background: #ffffff;
+
+    border: 1px solid #ddd;
+
+    border-radius: 10px;
+
+    outline: none;
+
+    transition: 0.3s ease;
+}
+
+
+/* Placeholder */
+
+.input-section input::placeholder {
+    color: #999;
+}
+
+
+/* Input focus */
+
+.input-section input:focus {
+    border-color: #dc3545;
+
+    box-shadow:
+        0 0 0 3px rgba(220, 53, 69, 0.1);
+}
+
+
+/* ================================
+   Add Button
+================================ */
+
+.add-btn {
+    flex: 1 1 100%;
+
+    height: 50px;
+
+    padding: 0 20px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    background: #dc3545;
+
+    color: white;
+
+    font-size: 15px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: all 0.3s ease;
+
+    display: block;
+
+    visibility: visible;
+
+    opacity: 1;
+}
+
+
+.add-btn:hover {
+    background: #bb2d3b;
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 8px 18px rgba(220, 53, 69, 0.25);
+}
+
+
+.add-btn:active {
+    transform: translateY(0);
+}
+
+
+/* ================================
+   Filter Section
+================================ */
+
+.filter-section {
+    display: flex;
+
+    justify-content: center;
+
+    gap: 10px;
+
+    margin-bottom: 25px;
+}
+
+
+.filter-section button {
+    padding: 9px 15px;
+
+    border: none;
+
+    background: #fff0f1;
+
+    color: #dc3545;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    transition: 0.2s ease;
+}
+
+
+.filter-section button:hover {
+    background: #ffe0e0;
+}
+
+
+/* Active filter */
+
+.filter-section .active-filter {
+    background: #dc3545;
+
+    color: white;
+}
+
+
+.filter-section .active-filter:hover {
+    background: #bb2d3b;
+}
+
+
+/* ================================
+   Todo List
+================================ */
+
+.todo-list {
+    list-style: none;
+
+    padding: 0;
+
+    margin: 0;
+}
+
+
+/* Empty message */
+
+.empty-message {
+    text-align: center;
+
+    padding: 25px;
+
+    color: #999;
+
+    font-size: 15px;
+}
+
+
+/* ================================
+   Todo Item
+================================ */
+
+.todo-item {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    padding: 15px;
+
+    margin-bottom: 10px;
+
+    background: #fffafa;
+
+    border: 1px solid #ffe0e0;
+
+    border-radius: 10px;
+
+    transition: 0.2s ease;
+}
+
+
+.todo-item:hover {
+    border-color: #f5bfc4;
+
+    box-shadow:
+        0 4px 12px rgba(220, 53, 69, 0.08);
+}
+
+
+/* Todo text */
+
+.todo-item span {
+    flex: 1;
+
+    color: #333;
+
+    font-size: 16px;
+
+    word-break: break-word;
+
+    min-width: 0;
+}
+
+
+/* Completed todo */
+
+.todo-item span.completed {
+    text-decoration: line-through;
+
+    color: #999;
+}
+
+
+/* ================================
+   Task Dates
+================================ */
+
+.task-dates {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 4px;
+
+    min-width: 140px;
+}
+
+
+.task-dates small {
+    color: #777;
+
+    font-size: 12px;
+}
+
+
+/* ================================
+   Todo Action Buttons
+================================ */
+
+.todo-actions {
+    display: flex;
+
+    gap: 8px;
+
+    flex-shrink: 0;
+}
+
+
+.todo-actions button {
+    padding: 8px 10px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    color: white;
+
+    transition: 0.2s ease;
+}
+
+
+/* Complete button */
+
+.complete-btn {
+    background: #dc3545;
+}
+
+
+.complete-btn:hover {
+    background: #bb2d3b;
+
+    transform: translateY(-1px);
+}
+
+
+/* Delete button */
+
+.delete-btn {
+    background: #6c757d;
+}
+
+
+.delete-btn:hover {
+    background: #5a6268;
+
+    transform: translateY(-1px);
+}
+
+
+/* ================================
+   Mobile Responsive
+================================ */
+
+@media (max-width: 500px) {
+
+    .todo-container {
+        width: 95%;
+
+        margin: 30px auto;
+
+        padding: 30px 20px;
+    }
+
+
+    .todo-container h1 {
+        font-size: 28px;
+    }
+
+
+    /* Stack inputs */
+
+    .input-section {
+        flex-direction: column;
+    }
+
+
+    .input-section input[type="text"],
+    .input-section input[type="date"],
+    .add-btn {
+        width: 100%;
+
+        flex: none;
+    }
+
+
+    /* Todo item */
+
+    .todo-item {
+        flex-direction: column;
+
+        align-items: stretch;
+    }
+
+
+    /* Dates */
+
+    .task-dates {
+        min-width: auto;
+    }
+
+
+    /* Action buttons */
+
+    .todo-actions {
+        justify-content: flex-end;
+    }
+
+
+    /* Filters */
+
+    .filter-section {
+        flex-wrap: wrap;
+    }
+
+}
