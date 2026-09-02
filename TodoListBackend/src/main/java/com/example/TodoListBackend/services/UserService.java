@@ -20,13 +20,21 @@ public class UserService {
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		return userRepository.save(user);
 	}
-	public Optional<User> getUserById(Long id){
+
+	public Optional<User> getUserById(Long id) {
 		return userRepository.findById(id);
 	}
-	public Optional<User> getUserByUserName(String username){
+
+	public Optional<User> getUserByUserName(String username) {
 		return userRepository.findByUsername(username);
 	}
-	public boolean checkPassword(String rawPassword,String encodedPassword) {
+
+	public boolean checkPassword(String rawPassword, String encodedPassword) {
 		return passwordEncoder.matches(rawPassword, encodedPassword);
+	}
+
+	public Optional<User> login(String username, String rawPassword) {
+		return userRepository.findByUsername(username)
+				.filter(u -> passwordEncoder.matches(rawPassword, u.getPassword()));
 	}
 }
