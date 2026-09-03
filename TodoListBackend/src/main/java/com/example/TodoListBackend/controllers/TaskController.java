@@ -21,7 +21,7 @@ import com.example.TodoListBackend.services.TaskService;
 
 import jakarta.validation.Valid;
 
-@CrossOrigin(origins = "http://localhost:5173")
+
 @RestController
 @RequestMapping("/api/v1/tasks")
 public class TaskController {

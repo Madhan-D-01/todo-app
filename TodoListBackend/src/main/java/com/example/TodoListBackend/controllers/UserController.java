@@ -22,7 +22,7 @@ import com.example.TodoListBackend.services.UserService;
 
 import jakarta.validation.Valid;
 
-@CrossOrigin(origins = "http://localhost:5173")
+
 @RestController
 @RequestMapping("/api/v1/users")
 public class UserController {
