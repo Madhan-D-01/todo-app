@@ -17,7 +17,7 @@ public class TaskService {
 		return taskRepository.save(task);
 	}
 
-	public List<Task> findTasksByUserId(Long userId) {
+	public List<Task> findByUserId(Long userId) {
 		return taskRepository.findByUserId(userId);
 	}
 
@@ -29,12 +29,8 @@ public class TaskService {
 		return taskRepository.findById(id).orElse(null);
 	}
 
-	public List<Task> findByAllCompletedTask() {
-		return taskRepository.findByCompletedTrue();
-	}
-
-	public List<Task> findByAllInCompletedTask() {
-		return taskRepository.findByCompletedFalse();
+	public List<Task> findCompletedByUserId(Long userId, boolean completed) {
+		return taskRepository.findByUserIdAndCompleted(userId, completed);
 	}
 
 	public void deleteTaskById(Long id) {
