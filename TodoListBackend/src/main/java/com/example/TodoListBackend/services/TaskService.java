@@ -17,6 +17,10 @@ public class TaskService {
 		return taskRepository.save(task);
 	}
 
+	public List<Task> findTasksByUserId(Long userId) {
+		return taskRepository.findByUserId(userId);
+	}
+
 	public List<Task> getAllTask() {
 		return taskRepository.findAll();
 	}
@@ -34,9 +38,8 @@ public class TaskService {
 	}
 
 	public void deleteTaskById(Long id) {
-	    taskRepository.deleteById(id);
+		taskRepository.deleteById(id);
 	}
-
 
 	public Task updateTask(Task task) {
 		return taskRepository.save(task);

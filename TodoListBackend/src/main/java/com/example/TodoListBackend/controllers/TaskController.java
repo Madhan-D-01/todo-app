@@ -27,20 +27,25 @@ public class TaskController {
 	private UserRepository userRepository;
 
 	private TaskResponse toResponse(Task task) {
-		return new TaskResponse(
-				task.getId(),
-				task.getTask(),
-				task.isCompleted(),
-				task.getStartDate(),
-				task.getEndDate(),
-				task.getUser() !=null ? task.getUser().getId():null);
+		return new TaskResponse(task.getId(), task.getTask(), task.isCompleted(), task.getStartDate(),
+				task.getEndDate(), task.getUser() != null ? task.getUser().getId() : null);
 	}
+
 	private List<TaskResponse> toResponseList(List<Task> tasks) {
-		return tasks.stream().map(task->this.toResponse(task)).collect(Collectors.toList());
+		return tasks.stream().map(task -> this.toResponse(task)).collect(Collectors.toList());
 	}
+
 	@GetMapping
 	public ResponseEntity<List<TaskResponse>> getAllTasks() {
 		return new ResponseEntity<>(toResponseList(taskService.getAllTask()), HttpStatus.OK);
+	}
+
+	@GetMapping("/{userId}")
+	public ResponseEntity<List<TaskResponse>> getTasksByUserId(@PathVariable Long userId) {
+
+		List<Task> tasks = taskService.findTasksByUserId(userId);
+
+		return ResponseEntity.ok(toResponseList(tasks));
 	}
 
 	@GetMapping("/completed")
@@ -54,16 +59,12 @@ public class TaskController {
 	}
 
 	@PostMapping
-	public ResponseEntity<TaskResponse> createTask(@RequestBody TaskRequest request ) {
+	public ResponseEntity<TaskResponse> createTask(@RequestBody TaskRequest request) {
 		User user = userRepository.findById(request.getUserId())
-				.orElseThrow(()->new IllegalArgumentException("User not found: " + request.getUserId()));
+				.orElseThrow(() -> new IllegalArgumentException("User not found: " + request.getUserId()));
 
-		Task task = Task.builder()
-				.task(request.getTask())
-				.completed(request.isCompleted())
-				.startDate(request.getStartDate())
-				.endDate(request.getEndDate())
-				.user(user)
+		Task task = Task.builder().task(request.getTask()).completed(request.isCompleted())
+				.startDate(request.getStartDate()).endDate(request.getEndDate()).user(user)
 
 				.build();
 		Task saved = taskService.createNewTask(task);
@@ -75,14 +76,8 @@ public class TaskController {
 		User user = userRepository.findById(request.getUserId())
 				.orElseThrow(() -> new IllegalArgumentException("User not found: " + request.getUserId()));
 
-		Task task = Task.builder()
-				.id(id)
-				.task(request.getTask())
-				.completed(request.isCompleted())
-				.startDate(request.getStartDate())
-				.endDate(request.getEndDate())
-				.user(user)
-				.build();
+		Task task = Task.builder().id(id).task(request.getTask()).completed(request.isCompleted())
+				.startDate(request.getStartDate()).endDate(request.getEndDate()).user(user).build();
 
 		Task updated = taskService.updateTask(task);
 		return new ResponseEntity<>(toResponse(updated), HttpStatus.OK);

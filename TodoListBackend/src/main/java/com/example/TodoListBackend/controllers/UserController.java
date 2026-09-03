@@ -54,7 +54,7 @@ public class UserController {
 
 	@PostMapping("/login")
 	public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
-		Optional<User> user = userService.login(request.getUsername(), request.getPassword());
+		Optional<User> user = userService.login(request.getEmail(), request.getPassword());
 
 		if (user.isEmpty()) {
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);

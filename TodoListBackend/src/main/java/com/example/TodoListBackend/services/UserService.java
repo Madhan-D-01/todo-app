@@ -33,8 +33,8 @@ public class UserService {
 		return passwordEncoder.matches(rawPassword, encodedPassword);
 	}
 
-	public Optional<User> login(String username, String rawPassword) {
-		return userRepository.findByUsername(username)
+	public Optional<User> login(String useremail, String rawPassword) {
+		return userRepository.findByEmail(useremail)
 				.filter(u -> passwordEncoder.matches(rawPassword, u.getPassword()));
 	}
 }
