@@ -2,14 +2,9 @@ package com.example.TodoListBackend.models;
 
 import java.util.List;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -28,12 +23,17 @@ public class User {
     private Long id;
 
     @Column(nullable = false, unique = true)
+    @NotBlank(message = "Username is required")
     private String username;
 
     @Column(nullable = false, unique = true)
+    @Email(message = "Must be a valid email")
+    @NotBlank(message = "Email is required")
     private String email;
 
     @Column(nullable = false)
+    @NotBlank(message = "Password is required")
+    @Size(min=8,message = "Passord must be at least 8 charachters")
     private String password;
 
     @OneToMany(

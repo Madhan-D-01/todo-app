@@ -20,6 +20,8 @@ import com.example.TodoListBackend.models.User;
 import com.example.TodoListBackend.security.JwtUtil;
 import com.example.TodoListBackend.services.UserService;
 
+import jakarta.validation.Valid;
+
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/api/v1/users")
@@ -34,7 +36,7 @@ public class UserController {
 	}
 
 	@PostMapping("/register")
-	public ResponseEntity<UserResponse> registerUser(@RequestBody User user) {
+	public ResponseEntity<UserResponse> registerUser(@Valid @RequestBody User user) {
 		User savedUser = userService.createUser(user);
 		return new ResponseEntity<>(toResponse(savedUser), HttpStatus.CREATED);
 	}
@@ -53,7 +55,7 @@ public class UserController {
 	}
 
 	@PostMapping("/login")
-	public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
+	public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
 		Optional<User> user = userService.login(request.getEmail(), request.getPassword());
 
 		if (user.isEmpty()) {

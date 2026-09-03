@@ -13,10 +13,13 @@ import org.springframework.web.bind.annotation.*;
 import com.example.TodoListBackend.dto.TaskRequest;
 import com.example.TodoListBackend.dto.TaskResponse;
 import com.example.TodoListBackend.dto.UserResponse;
+import com.example.TodoListBackend.exceptions.ResourceNotFoundException;
 import com.example.TodoListBackend.models.Task;
 import com.example.TodoListBackend.models.User;
 import com.example.TodoListBackend.repositories.UserRepository;
 import com.example.TodoListBackend.services.TaskService;
+
+import jakarta.validation.Valid;
 
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
@@ -32,7 +35,7 @@ public class TaskController {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		String username = (String) auth.getPrincipal();
 		return userRepository.findByUsername(username)
-				.orElseThrow(() -> new IllegalStateException("Authenticatoin user not found" + username));
+				.orElseThrow(() -> new ResourceNotFoundException("Authenticatoin user not found" + username));
 	}
 
 	private TaskResponse toResponse(Task task) {
@@ -65,7 +68,7 @@ public class TaskController {
 	}
 
 	@PostMapping
-	public ResponseEntity<TaskResponse> createTask(@RequestBody TaskRequest request) {
+	public ResponseEntity<TaskResponse> createTask(@Valid @RequestBody TaskRequest request) {
 		User currentUser = getCurrentUser();
 
 		Task task = Task.builder().task(request.getTask()).completed(request.isCompleted())
@@ -75,7 +78,7 @@ public class TaskController {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<TaskResponse> updateTask(@PathVariable Long id, @RequestBody TaskRequest request) {
+	public ResponseEntity<TaskResponse> updateTask(@PathVariable Long id,@Valid @RequestBody TaskRequest request) {
 		User currentUser = getCurrentUser();
 		Task existing = taskService.findTaskById(id);
 		if (existing == null || !existing.getUser().getId().equals(currentUser.getId())) {
