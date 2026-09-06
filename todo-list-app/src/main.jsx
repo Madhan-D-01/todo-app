@@ -6,6 +6,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Login from './Login.jsx'
 import TodoList from './TodoList.jsx'
 import SignUp from './SignUp.jsx'
+import Profile from './Profile.jsx'
 
 const router = createBrowserRouter([
   {
@@ -19,11 +20,15 @@ const router = createBrowserRouter([
   {
     path: '/signup',
     element: <SignUp />
+  },
+  {
+    path:'/profile',
+    element:<Profile/>
   }
 ]);
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <RouterProvider router={router} />
-  </StrictMode>,
+  </StrictMode>
 )

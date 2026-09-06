@@ -5,6 +5,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,7 +23,6 @@ import com.example.TodoListBackend.security.JwtUtil;
 import com.example.TodoListBackend.services.UserService;
 
 import jakarta.validation.Valid;
-
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -65,5 +66,14 @@ public class UserController {
 		return new ResponseEntity<>(new LoginResponse(token, user.get().getEmail()), HttpStatus.OK);
 
 	}
+	@GetMapping("/me")
+	public ResponseEntity<UserResponse> getCurrentUser() {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		String username = (String) auth.getPrincipal();
 
+		return userService.getUserByUserName(username)
+				.map(u -> new ResponseEntity<>(toResponse(u), HttpStatus.OK))
+				.orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+	}
 }
+

@@ -19,7 +19,7 @@ function SignUp() {
     e.preventDefault(),
 
       setError('')
-    setLoading(true)
+    setLoading(true);
 
     try {
       const response = await fetch(`${API_URL}/register`, {
@@ -34,17 +34,18 @@ function SignUp() {
         }),
 
       });
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(errorText || "Registration failed");
-      }
       const data = await response.json();
+      if (!response.ok) {
+        const message = data.message || Object.values(data.errors || {})[0] || "Registration failed";;
+        throw new Error(message);
+      }
+
       console.log("Registered user:", data);
       navigate("/login");
     }
     catch (error) {
       console.error("Signup Error", error);
-      setError("Unable to register, Please Try Again");
+      setError(error.message||"Unable to register, Please Try Again");
     }
     finally {
       setLoading(false);
@@ -64,7 +65,7 @@ function SignUp() {
                 value={username} placeholder="Enter your name" required />
             </div>
             <div>
-              <input type="type"
+              <input type="email"
                 onChange={(e) => setUseremail(e.target.value)}
                 value={useremail} placeholder="Enter your email" required />
             </div>

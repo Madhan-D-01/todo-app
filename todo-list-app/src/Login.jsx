@@ -11,43 +11,40 @@ function Login() {
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
+
   const handleLogin = async (e) => {
     e.preventDefault();
-
-    setError("");
+    setError('');
     setLoading(true);
 
     try {
       const response = await fetch(`${API_URL}/login`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
+          "content-type": "application/json",
         },
         body: JSON.stringify({
-          username: useremail,
+          email: useremail,
           password: userpassword,
         }),
       });
-
-      if (!response.ok) {
-        if (response.status === 401) {
-          throw new Error("Invalid username or password");
-        }
-
-        throw new Error("Login failed");
-      }
       const data = await response.json();
-      console.log("Login successful:", data);
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("email", data.email);
+      if (!response.ok) {
+        const message = data.message || Object.values(data.errors || {})[0] || "Login failed";
+        throw new Error(message);
+      }
+      localStorage.setItem("token", data.token)
+      console.log("logged in:", data);
       navigate("/");
-    } catch (error) {
-      console.error("Login Error:", error);
-      setError(error.message || "Unable to login. Please try again.");
-    } finally {
+    }
+    catch (error) {
+      console.error("Login Error", error);
+      setError(error.message || "Invalid email or password")
+    }
+    finally {
       setLoading(false);
     }
-  };
+  }
 
   return (
     <div>
@@ -79,8 +76,13 @@ function Login() {
                 )}
               </button>
             </div>
+            {error && (
+              <p style={{ color: "red" }}>{error}</p>
+            )}
             <div>
-              <button className="btn btn-danger">Login</button>
+              <button className="btn btn-danger" disabled={loading}>
+                {loading ? "Logging in..." : "Login"}
+              </button>
             </div>
             <div className="signup-text">
               <p>Don't have an account?</p><Link to="/signup">Signup</Link>

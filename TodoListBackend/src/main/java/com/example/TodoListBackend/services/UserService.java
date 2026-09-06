@@ -19,7 +19,7 @@ public class UserService {
 
 	public User createUser(User user) {
 		if (userRepository.findByUsername(user.getUsername()).isPresent()) {
-			throw new DuplicateResourceException("Username already takesn: " + user.getUsername());
+			throw new DuplicateResourceException("Username already taken: " + user.getUsername());
 		}
 		if (userRepository.findByEmail(user.getEmail()).isPresent()) {
 			throw new DuplicateResourceException("Email already takesn: " + user.getEmail());

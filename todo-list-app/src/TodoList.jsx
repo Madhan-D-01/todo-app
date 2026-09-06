@@ -1,7 +1,9 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
+import { useNavigate } from "react-router-dom"
 
 const API_URL = 'http://localhost:8090/api/v1/tasks';
+const USER_URL = 'http://localhost:8090/api/v1/users/me';
 
 function TodoList() {
 
@@ -10,13 +12,61 @@ function TodoList() {
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
     const [filter, setFilter] = useState('all');
-    // Get tasks from Spring Boot when the component loads
+    const [userId, setUserId] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
+
+    const getAuthHeaders = () => {
+        const token = localStorage.getItem("token");
+        if (!token) {
+            navigate("/login");
+            return null;
+        }
+        return {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        };
+    };
+
+    const handleAuthFailure = (response) => {
+        if (response.status === 401 || response.status === 403) {
+            localStorage.removeItem("token");
+            navigate("/login");
+            return true;
+        }
+        return false;
+    };
     useEffect(() => {
-        fetchTodos();
-    }, []);
-    const fetchTodos = async () => {
+        const init = async () => {
+            const headers = getAuthHeaders();
+            if (!headers) return;
+
+            try {
+                const meResponse = await fetch(USER_URL, { headers });
+                if (handleAuthFailure(meResponse)) return;
+                if (!meResponse.ok) throw new Error("Failed to load user");
+
+                const me = await meResponse.json();
+                setUserId(me.id);
+
+                await fetchTodos(headers);
+            } catch (error) {
+                console.error("Error initializing todo list", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        init();
+    }, [])
+
+    // Get tasks from Spring Boot when the component loads
+    const fetchTodos = async (headers) => {
+        const authHeaders = headers || getAuthHeaders();
+        if (!authHeaders) return;
+
         try {
-            const response = await fetch(API_URL);
+            const response = await fetch(API_URL, { headers: authHeaders });
+            if (handleAuthFailure(response)) return;
             if (!response.ok) {
                 throw new Error("Failed to fetch tasks");
             }
@@ -24,7 +74,6 @@ function TodoList() {
             setTodos(data);
         } catch (error) {
             console.error("Error fetching tasks", error);
-
         }
     };
     // Add task
@@ -38,21 +87,27 @@ function TodoList() {
             alert("End date cannot be before start date");
             return;
         }
+        if (!userId) {
+            console.error("No userId loaded yet");
+            return;
+        }
+        const headers = getAuthHeaders();
+        if (!headers) return;
 
         const newTask = {
             task: input,
             completed: false,
             startDate: startDate,
-            endDate: endDate
+            endDate: endDate,
+            userId: userId
         };
         try {
             const response = await fetch(API_URL, {
                 method: "POST",
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+                headers: headers,
                 body: JSON.stringify(newTask)
             });
+            if (handleAuthFailure(response)) return;
             if (!response.ok) {
                 throw new Error('Failed to create task');
             }
@@ -74,29 +129,29 @@ function TodoList() {
             console.error("Todo not found:", id);
             return;
         }
+        const headers = getAuthHeaders();
+        if (!headers) return;
         const updatedTask = {
             task: todo.task,
             completed: !todo.completed,
             startDate: todo.startDate,
-            endDate: todo.endDate
+            endDate: todo.endDate,
+            userId: userId
         };
-        console.log("Sending PUT request:", updatedTask);
+
         try {
             const response = await fetch(`${API_URL}/${id}`, {
                 method: "PUT",
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+                headers: headers,
                 body: JSON.stringify(updatedTask)
             });
+            if (handleAuthFailure(response)) return;
             if (!response.ok) {
                 const errorText = await response.text();
                 console.error("Server error:", errorText);
                 throw new Error("Failed to update task");
             }
-            console.log("PUT status:", response.status);
             const savedTask = await response.json();
-            console.log("Saved task:", savedTask);
             setTodos(
                 todos.map((todo) =>
                     todo.id === id
@@ -106,18 +161,20 @@ function TodoList() {
         }
         catch (error) {
             console.error("Error updating task:", error);
-
         }
     };
 
     // Delete task
 
     const handleDelete = async (id) => {
+        const headers = getAuthHeaders();
+        if (!headers) return;
         try {
             const response = await fetch(`${API_URL}/${id}`, {
-                method: 'DELETE'
+                method: 'DELETE',
+                headers: headers
             });
-
+            if (handleAuthFailure(response)) return;
             if (!response.ok) {
                 throw new Error('Failed to delete task');
             }
@@ -133,7 +190,7 @@ function TodoList() {
         if (filter === 'completed') return todo.completed;
         return true;
     });
-
+    if (loading) return <div className="todo-container"><p>Loading...</p></div>;
     return (
         <div className="todo-container">
             <h1>Todo List</h1>
