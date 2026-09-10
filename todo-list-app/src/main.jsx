@@ -8,6 +8,7 @@ import TodoList from './TodoList.jsx'
 import SignUp from './SignUp.jsx'
 import Profile from './Profile.jsx'
 import TaskList from './TaskList.jsx'
+import Settings from './Settings.jsx'
 
 const router = createBrowserRouter([
   {
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
   {
     path:'/profile',
     element:<Profile/>
+  },
+   {
+    path:'/settings',
+    element:<Settings/>
   }
 ]);
 

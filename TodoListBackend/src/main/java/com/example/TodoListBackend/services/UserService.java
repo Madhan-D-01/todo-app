@@ -5,7 +5,9 @@ import java.util.Optional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.example.TodoListBackend.dto.UpdateProfileRequest;
 import com.example.TodoListBackend.exceptions.DuplicateResourceException;
+import com.example.TodoListBackend.exceptions.ResourceNotFoundException;
 import com.example.TodoListBackend.models.User;
 import com.example.TodoListBackend.repositories.UserRepository;
 
@@ -43,5 +45,19 @@ public class UserService {
 
 	public Optional<User> login(String useremail, String rawPassword) {
 		return userRepository.findByEmail(useremail).filter(u -> passwordEncoder.matches(rawPassword, u.getPassword()));
+	}
+
+	public User updateProfile(String currentUsername, UpdateProfileRequest request) {
+		User user = userRepository.findByUsername(currentUsername)
+				.orElseThrow(() -> new ResourceNotFoundException("User not found: " + currentUsername));
+
+		if (!user.getEmail().equals(request.getEmail()) && userRepository.findByEmail(request.getEmail()).isPresent()) {
+			throw new DuplicateResourceException("Email already in use: " + request.getEmail());
+		}
+
+		user.setFirstName(request.getFirstName());
+		user.setLastName(request.getLastName());
+		user.setEmail(request.getEmail());
+		return userRepository.save(user);
 	}
 }

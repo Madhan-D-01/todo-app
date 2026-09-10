@@ -11,12 +11,14 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.TodoListBackend.dto.LoginRequest;
 import com.example.TodoListBackend.dto.LoginResponse;
+import com.example.TodoListBackend.dto.UpdateProfileRequest;
 import com.example.TodoListBackend.dto.UserResponse;
 import com.example.TodoListBackend.models.User;
 import com.example.TodoListBackend.security.JwtUtil;
@@ -33,7 +35,13 @@ public class UserController {
 	private JwtUtil jwtUtil;
 
 	private UserResponse toResponse(User user) {
-		return new UserResponse(user.getId(), user.getUsername(), user.getEmail());
+		return new UserResponse(user.getId(),
+				user.getUsername(),
+				user.getEmail(),
+				user.getFirstName(),
+				user.getLastName(),
+				user.getAvatarUrl()
+				);
 	}
 
 	@PostMapping("/register")
@@ -74,6 +82,13 @@ public class UserController {
 		return userService.getUserByUserName(username)
 				.map(u -> new ResponseEntity<>(toResponse(u), HttpStatus.OK))
 				.orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+	}
+	@PutMapping("/me")
+	public ResponseEntity<UserResponse> updateProfile(@Valid @RequestBody UpdateProfileRequest request) {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		String username = (String) auth.getPrincipal();
+		User updated = userService.updateProfile(username, request);
+		return new ResponseEntity<>(toResponse(updated), HttpStatus.OK);
 	}
 }
 

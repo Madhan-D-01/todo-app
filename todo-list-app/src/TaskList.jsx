@@ -258,7 +258,7 @@ function TaskList() {
                 )}
 
                 <div className="sidebar-footer">
-                    <a href="/profile" className="nav-item">Settings</a>
+                    <a href="/settings" className="nav-item">Settings</a>
                     <button className="nav-item logout-item" onClick={handleLogout}>Logout</button>
                 </div>
             </aside>
