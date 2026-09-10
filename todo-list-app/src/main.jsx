@@ -7,11 +7,13 @@ import Login from './Login.jsx'
 import TodoList from './TodoList.jsx'
 import SignUp from './SignUp.jsx'
 import Profile from './Profile.jsx'
+import TaskList from './TaskList.jsx'
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <TodoList />
+    // element: <TodoList />
+     element: <TaskList />
   },
   {
     path: '/login',

@@ -39,8 +39,14 @@ public class TaskController {
 	}
 
 	private TaskResponse toResponse(Task task) {
-		return new TaskResponse(task.getId(), task.getTask(), task.isCompleted(), task.getStartDate(),
-				task.getEndDate(), task.getUser() != null ? task.getUser().getId() : null);
+		return new TaskResponse(task.getId(),
+				task.getTask(),
+				task.isCompleted(),
+				task.getStartDate(),
+				task.getEndDate(),
+				task.getPriority(),
+				task.getCategory(),
+				task.getUser() != null ? task.getUser().getId() : null);
 	}
 
 	private List<TaskResponse> toResponseList(List<Task> tasks) {
@@ -71,8 +77,14 @@ public class TaskController {
 	public ResponseEntity<TaskResponse> createTask(@Valid @RequestBody TaskRequest request) {
 		User currentUser = getCurrentUser();
 
-		Task task = Task.builder().task(request.getTask()).completed(request.isCompleted())
-				.startDate(request.getStartDate()).endDate(request.getEndDate()).user(currentUser).build();
+		Task task = Task.builder()
+				.task(request.getTask())
+				.completed(request.isCompleted())
+				.startDate(request.getStartDate())
+				.endDate(request.getEndDate())
+				.priority(request.getPriority())
+				.category(request.getCategory())
+				.user(currentUser).build();
 		Task saved = taskService.createNewTask(task);
 		return new ResponseEntity<>(toResponse(saved), HttpStatus.CREATED);
 	}
@@ -81,12 +93,21 @@ public class TaskController {
 	public ResponseEntity<TaskResponse> updateTask(@PathVariable Long id,@Valid @RequestBody TaskRequest request) {
 		User currentUser = getCurrentUser();
 		Task existing = taskService.findTaskById(id);
-		if (existing == null || !existing.getUser().getId().equals(currentUser.getId())) {
+		if (existing == null || !existing.getUser()
+				.getId()
+				.equals(currentUser.getId())) {
 			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 		}
-		Task task = Task.builder().id(id).task(request.getTask()).completed(request.isCompleted())
-				.startDate(request.getStartDate()).endDate(request.getEndDate()).user(currentUser).build();
-
+		Task task = Task.builder()
+				.id(id)
+				.task(request.getTask())
+				.completed(request.isCompleted())
+				.startDate(request.getStartDate())
+				.endDate(request.getEndDate())
+				.priority(request.getPriority())
+				.category(request.getCategory())
+				.user(currentUser)
+				.build();
 		Task updated = taskService.updateTask(task);
 		return new ResponseEntity<>(toResponse(updated), HttpStatus.OK);
 	}

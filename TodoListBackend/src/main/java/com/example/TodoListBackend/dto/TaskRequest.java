@@ -2,6 +2,8 @@ package com.example.TodoListBackend.dto;
 
 import java.time.LocalDateTime;
 
+import com.example.TodoListBackend.models.Priority;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -16,6 +18,8 @@ public class TaskRequest {
 	private LocalDateTime startDate;
 	private LocalDateTime endDate;
 
-	@NotNull(message = "UserId is required")
-	private Long userId;
+	@NotNull(message = "Priority is required")
+	private Priority priority;
+
+	private String category;
 }

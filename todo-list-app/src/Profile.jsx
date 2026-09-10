@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import './register.css'
 import { useNavigate } from 'react-router';
+import Navbar from './Navbar';
 
 const API_URL = 'http://localhost:8090/api/v1/users';
 function Profile() {
@@ -49,15 +50,19 @@ function Profile() {
     if (loading) return <div className="container"><p>Loading...</p></div>;
     if (error) return <div className="container"><p style={{ color: "red" }}>{error}</p></div>;
     return (
-        <div className="container">
-            <div className="login-box">
-                <h2>
-                    Profile
-                </h2>
-                <p><strong>Username:</strong>{user.username}</p>
-                <p><strong>Useremail:</strong>{user.email}</p>
+        <>
+            <Navbar />
+
+            <div className="container">
+                <div className="login-box">
+                    <h2>
+                        Profile
+                    </h2>
+                    <p><strong>Username:</strong>{user.username}</p>
+                    <p><strong>Useremail:</strong>{user.email}</p>
+                </div>
             </div>
-        </div>
+        </>
     )
 }
 

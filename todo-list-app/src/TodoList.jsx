@@ -1,10 +1,40 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
 import { useNavigate } from "react-router-dom"
+import Navbar from './Navbar';
+import './tasklist.css';
 
 const API_URL = 'http://localhost:8090/api/v1/tasks';
 const USER_URL = 'http://localhost:8090/api/v1/users/me';
+const CATEGORY_COLORS = {
+    Personal: '#e8720c',
+    Work: '#2563eb',
+    Shopping: '#434655',
+};
+const DEFAULT_CATEGORY_COLOR = '#916f6a';
+function categoryColor(category) {
+    return CATEGORY_COLORS[category] || DEFAULT_CATEGORY_COLOR;
+}
+function priorityClass(priority) {
+    if (priority === 'HIGH') return 'priority-chip priority-high';
+    if (priority === 'MEDIUM') return 'priority-chip priority-medium';
+    return 'priority-chip priority-low';
+}
 
+function formatDue(dateStr) {
+    if (!dateStr) return '';
+    const date = new Date(dateStr);
+    const now = new Date();
+    const isToday = date.toDateString() === now.toDateString();
+    const tomorrow = new Date(now);
+    tomorrow.setDate(now.getDate() + 1);
+    const isTomorrow = date.toDateString() === tomorrow.toDateString();
+
+    const time = date.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+    if (isToday) return `Today, ${time}`;
+    if (isTomorrow) return `Tomorrow`;
+    return date.toLocaleDateString([], { month: 'short', day: 'numeric' });
+}
 function TodoList() {
 
     const [todos, setTodos] = useState([]);
@@ -192,103 +222,105 @@ function TodoList() {
     });
     if (loading) return <div className="todo-container"><p>Loading...</p></div>;
     return (
-        <div className="todo-container">
-            <h1>Todo List</h1>
+        <><Navbar />
+            <div className="todo-container">
+                <h1>Todo List</h1>
 
-            <div className="input-section">
-                <input
-                    type="text"
-                    value={input}
-                    placeholder="Enter a task..."
-                    onChange={(e) => setInput(e.target.value)}
-                    onKeyDown={(e) => {
-                        if (e.key === 'Enter') handleAdd();
-                    }}
-                />
-                <input type="datetime-local"
-                    value={startDate}
-                    onChange={(e) => setStartDate(e.target.value)} />
-                <input
-                    type="datetime-local"
-                    value={endDate}
-                    onChange={(e) => setEndDate(e.target.value)}
-                />
-                <button className="add-btn" onClick={handleAdd}>
-                    Add
-                </button>
-            </div>
+                <div className="input-section">
+                    <input
+                        type="text"
+                        value={input}
+                        placeholder="Enter a task..."
+                        onChange={(e) => setInput(e.target.value)}
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter') handleAdd();
+                        }}
+                    />
+                    <input type="datetime-local"
+                        value={startDate}
+                        onChange={(e) => setStartDate(e.target.value)} />
+                    <input
+                        type="datetime-local"
+                        value={endDate}
+                        onChange={(e) => setEndDate(e.target.value)}
+                    />
+                    <button className="add-btn" onClick={handleAdd}>
+                        Add
+                    </button>
+                </div>
 
-            <div className="filter-section">
-                <button
-                    className={filter === 'all' ? 'active-filter' : ''}
-                    onClick={() => setFilter('all')}
-                >
-                    All
-                </button>
+                <div className="filter-section">
+                    <button
+                        className={filter === 'all' ? 'active-filter' : ''}
+                        onClick={() => setFilter('all')}
+                    >
+                        All
+                    </button>
 
-                <button
-                    className={filter === 'active' ? 'active-filter' : ''}
-                    onClick={() => setFilter('active')}
-                >
-                    Active
-                </button>
+                    <button
+                        className={filter === 'active' ? 'active-filter' : ''}
+                        onClick={() => setFilter('active')}
+                    >
+                        Active
+                    </button>
 
-                <button
-                    className={filter === 'completed' ? 'active-filter' : ''}
-                    onClick={() => setFilter('completed')}
-                >
-                    Completed
-                </button>
-            </div>
+                    <button
+                        className={filter === 'completed' ? 'active-filter' : ''}
+                        onClick={() => setFilter('completed')}
+                    >
+                        Completed
+                    </button>
+                </div>
 
-            <ul className="todo-list">
-                {filteredTodos.map((todo) => (
-                    <li className="todo-item" key={todo.id}>
-                        <span
-                            className={todo.completed ? 'completed' : ''}
-                        >
-                            {todo.task}
-                        </span>
-                        <div className="task-dates">
-                            <small>
-                                Start: {todo.startDate
-                                    ? new Date(todo.startDate).toLocaleString([], {
-                                        dateStyle: 'medium',
-                                        timeStyle: 'short'
-                                    })
-                                    : ''}
-                            </small>
-
-                            <small>
-                                End: {todo.endDate
-                                    ? new Date(todo.endDate).toLocaleString([], {
-                                        dateStyle: 'medium',
-                                        timeStyle: 'short'
-                                    })
-                                    : ''}
-                            </small>
-                        </div>
-
-
-                        <div className="todo-actions">
-                            <button
-                                className="complete-btn"
-                                onClick={() => handleToggle(todo.id)}
+                <ul className="todo-list">
+                    {filteredTodos.map((todo) => (
+                        <li className="todo-item" key={todo.id}>
+                            <span
+                                className={todo.completed ? 'completed' : ''}
                             >
-                                {todo.completed ? 'Undo' : 'Complete'}
-                            </button>
+                                {todo.task}
+                            </span>
+                            <div className="task-dates">
+                                <small>
+                                    Start: {todo.startDate
+                                        ? new Date(todo.startDate).toLocaleString([], {
+                                            dateStyle: 'medium',
+                                            timeStyle: 'short'
+                                        })
+                                        : ''}
+                                </small>
 
-                            <button
-                                className="delete-btn"
-                                onClick={() => handleDelete(todo.id)}
-                            >
-                                Delete
-                            </button>
-                        </div>
-                    </li>
-                ))}
-            </ul>
-        </div>
+                                <small>
+                                    End: {todo.endDate
+                                        ? new Date(todo.endDate).toLocaleString([], {
+                                            dateStyle: 'medium',
+                                            timeStyle: 'short'
+                                        })
+                                        : ''}
+                                </small>
+                            </div>
+
+
+                            <div className="todo-actions">
+                                <button
+                                    className="complete-btn"
+                                    onClick={() => handleToggle(todo.id)}
+                                >
+                                    {todo.completed ? 'Undo' : 'Complete'}
+                                </button>
+
+                                <button
+                                    className="delete-btn"
+                                    onClick={() => handleDelete(todo.id)}
+                                >
+                                    Delete
+                                </button>
+                            </div>
+                        </li>
+                    ))}
+                </ul>
+            </div>
+        </>
     );
 }
 
