@@ -1,0 +1,252 @@
+.dash-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.dash-heading h2 {
+    font-size: 28px;
+    font-weight: 700;
+    margin: 0 0 4px;
+    color: #191c1e;
+}
+
+.dash-heading p {
+    color: #434655;
+    margin: 0;
+    font-size: 14px;
+}
+
+.dash-date {
+    padding: 8px 16px;
+    border: 1px solid #c3c6d7;
+    border-radius: 999px;
+    font-size: 13px;
+    color: #434655;
+    background: #fff;
+}
+
+.stat-cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.stat-card {
+    background: #fff;
+    border: 1px solid #c3c6d7;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.stat-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #737686;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+}
+
+.stat-value {
+    display: block;
+    font-size: 32px;
+    font-weight: 700;
+    color: #191c1e;
+    margin-top: 8px;
+}
+
+.productivity-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.week-strip {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 12px;
+}
+
+.week-day {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    color: #737686;
+    background: #f2f4f6;
+}
+
+.week-day.active {
+    background: #004ac6;
+    color: #fff;
+    font-weight: 600;
+}
+
+.dash-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 20px;
+}
+
+.deadlines-card,
+.focus-card {
+    background: #fff;
+    border: 1px solid #c3c6d7;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.deadlines-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.deadlines-header h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #191c1e;
+}
+
+.deadlines-header a {
+    color: #004ac6;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.deadline-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 0;
+    border-top: 1px solid #f1f5f9;
+}
+
+.deadline-row:first-of-type {
+    border-top: none;
+}
+
+.deadline-info {
+    flex: 1;
+}
+
+.deadline-title {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: #191c1e;
+}
+
+.deadline-sub {
+    margin: 2px 0 0;
+    font-size: 12px;
+    color: #737686;
+}
+
+.deadline-chip {
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    background: #e0e3e5;
+    color: #434655;
+    white-space: nowrap;
+}
+
+.deadline-chip.urgent {
+    background: #ffdad6;
+    color: #ba1a1a;
+}
+
+.focus-card h3 {
+    margin: 0 0 14px;
+    font-size: 18px;
+    font-weight: 600;
+    color: #191c1e;
+}
+
+.focus-placeholder {
+    background: #f2f4f6;
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 14px;
+}
+
+.focus-placeholder p {
+    margin: 0;
+}
+
+.focus-placeholder p:first-child {
+    font-weight: 600;
+    color: #191c1e;
+}
+
+.focus-sub {
+    font-size: 12px;
+    color: #737686;
+    margin-top: 4px !important;
+}
+
+.focus-btn {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: #004ac6;
+    color: #fff;
+    font-weight: 600;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+body.dark-mode .stat-card,
+body.dark-mode .deadlines-card,
+body.dark-mode .focus-card {
+    background: #232629;
+    border-color: #434655;
+}
+
+body.dark-mode .stat-value,
+body.dark-mode .dash-heading h2,
+body.dark-mode .deadlines-header h3,
+body.dark-mode .focus-card h3,
+body.dark-mode .deadline-title {
+    color: #fff;
+}
+
+body.dark-mode .dash-date {
+    background: #232629;
+    border-color: #434655;
+    color: #c3c6d7;
+}
+
+body.dark-mode .week-day {
+    background: #2d3133;
+    color: #9aa0a6;
+}
+
+body.dark-mode .focus-placeholder {
+    background: #2d3133;
+}
+
+@media (max-width: 900px) {
+    .stat-cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .dash-grid {
+        grid-template-columns: 1fr;
+    }
+}
