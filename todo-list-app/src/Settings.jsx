@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
-import Navbar from './Navbar.jsx';
+import Sidebar from './Sidebar.jsx';
+import './tasklist.css';
 import './settings.css';
 
 const API_URL = 'http://localhost:8090/api/v1/users';
@@ -13,7 +14,7 @@ function Settings() {
 
   const [emailNotifs, setEmailNotifs] = useState(true);
   const [pushNotifs, setPushNotifs] = useState(false);
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(() => localStorage.getItem('darkMode') === 'true');
 
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -66,6 +67,11 @@ function Settings() {
     fetchProfile();
   }, []);
 
+  useEffect(() => {
+    document.body.classList.toggle('dark-mode', darkMode);
+    localStorage.setItem('darkMode', darkMode);
+  }, [darkMode]);
+
   const handleSave = async (e) => {
     e.preventDefault();
     setError('');
@@ -102,154 +108,158 @@ function Settings() {
   if (loading) return <div className="settings-loading">Loading...</div>;
 
   return (
-    <>
-      <div className="settings-page">
-        <div className="settings-heading">
-          <h1>Settings</h1>
-          <p>Manage your account settings, preferences, and notifications.</p>
-        </div>
+    <div className="app-shell">
+      <Sidebar active="settings" />
+      <div className="main-area">
+        <header className="topbar">
+          <input className="search-input" type="text" placeholder="Search settings..." />
+        </header>
+        <main className="settings-page">
+          <div className="settings-heading">
+            <h1>Settings</h1>
+            <p>Manage your account settings, preferences, and notifications.</p>
+          </div>
 
-        <div className="settings-grid">
-          {/* Left column: Profile Information */}
-          <section className="settings-card profile-card">
-            <h3>Profile Information</h3>
-            <p className="card-subtitle">Update your personal details.</p>
+          <div className="settings-grid">
+            <section className="settings-card profile-card">
+              <h3>Profile Information</h3>
+              <p className="card-subtitle">Update your personal details.</p>
 
-            <form onSubmit={handleSave} className="profile-form">
-              <div className="avatar-block">
-                <div className="avatar-circle">
-                  {avatarUrl ? (
-                    <img src={avatarUrl} alt="Profile avatar" />
-                  ) : (
-                    <span className="avatar-fallback">
-                      {(firstName?.[0] || '') + (lastName?.[0] || '')}
-                    </span>
-                  )}
-                </div>
-                <button type="button" className="change-avatar-link" disabled title="Coming soon">
-                  Change Avatar
-                </button>
-              </div>
-
-              <div className="form-fields">
-                <div className="name-row">
-                  <div className="field">
-                    <label>First Name</label>
-                    <input
-                      type="text"
-                      value={firstName}
-                      onChange={(e) => setFirstName(e.target.value)}
-                      required
-                    />
+              <form onSubmit={handleSave} className="profile-form">
+                <div className="avatar-block">
+                  <div className="avatar-circle">
+                    {avatarUrl ? (
+                      <img src={avatarUrl} alt="Profile avatar" />
+                    ) : (
+                      <span className="avatar-fallback">
+                        {(firstName?.[0] || '') + (lastName?.[0] || '')}
+                      </span>
+                    )}
                   </div>
-                  <div className="field">
-                    <label>Last Name</label>
-                    <input
-                      type="text"
-                      value={lastName}
-                      onChange={(e) => setLastName(e.target.value)}
-                      required
-                    />
-                  </div>
-                </div>
-
-                <div className="field">
-                  <label>Email Address</label>
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                  />
-                </div>
-
-                {error && <p className="form-error">{error}</p>}
-                {saved && <p className="form-success">Changes saved.</p>}
-
-                <div className="save-row">
-                  <button type="submit" className="save-btn" disabled={saving}>
-                    {saving ? "Saving..." : "Save Changes"}
+                  <button type="button" className="change-avatar-link" disabled title="Coming soon">
+                    Change Avatar
                   </button>
                 </div>
-              </div>
-            </form>
-          </section>
 
-          {/* Right column */}
-          <div className="settings-side">
-            <section className="settings-card">
-              <h3>Appearance</h3>
-              <p className="card-subtitle">Customize your UI theme.</p>
+                <div className="form-fields">
+                  <div className="name-row">
+                    <div className="field">
+                      <label>First Name</label>
+                      <input
+                        type="text"
+                        value={firstName}
+                        onChange={(e) => setFirstName(e.target.value)}
+                        required
+                      />
+                    </div>
+                    <div className="field">
+                      <label>Last Name</label>
+                      <input
+                        type="text"
+                        value={lastName}
+                        onChange={(e) => setLastName(e.target.value)}
+                        required
+                      />
+                    </div>
+                  </div>
 
-              <div className="toggle-row">
-                <div className="toggle-label-group">
-                  <p className="toggle-title">Light Mode</p>
-                  <p className="toggle-desc">Default bright theme</p>
+                  <div className="field">
+                    <label>Email Address</label>
+                    <input
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                    />
+                  </div>
+
+                  {error && <p className="form-error">{error}</p>}
+                  {saved && <p className="form-success">Changes saved.</p>}
+
+                  <div className="save-row">
+                    <button type="submit" className="save-btn" disabled={saving}>
+                      {saving ? "Saving..." : "Save Changes"}
+                    </button>
+                  </div>
                 </div>
-                <label className="switch">
-                  <input
-                    type="checkbox"
-                    checked={!darkMode}
-                    onChange={() => setDarkMode(false)}
-                  />
-                  <span className="slider"></span>
-                </label>
-              </div>
-
-              <div className="toggle-row dimmed">
-                <div className="toggle-label-group">
-                  <p className="toggle-title">Dark Mode</p>
-                  <p className="toggle-desc">Easier on the eyes</p>
-                </div>
-                <label className="switch">
-                  <input
-                    type="checkbox"
-                    checked={darkMode}
-                    onChange={() => setDarkMode(true)}
-                  />
-                  <span className="slider"></span>
-                </label>
-              </div>
+              </form>
             </section>
 
-            <section className="settings-card">
-              <h3>Notifications</h3>
-              <p className="card-subtitle">Manage your alerts.</p>
+            <div className="settings-side">
+              <section className="settings-card">
+                <h3>Appearance</h3>
+                <p className="card-subtitle">Customize your UI theme.</p>
 
-              <div className="toggle-row">
-                <div className="toggle-label-group">
-                  <p className="toggle-title">Email Notifications</p>
-                  <p className="toggle-desc">Daily digests and updates</p>
+                <div className="toggle-row">
+                  <div className="toggle-label-group">
+                    <p className="toggle-title">Light Mode</p>
+                    <p className="toggle-desc">Default bright theme</p>
+                  </div>
+                  <label className="switch">
+                    <input
+                      type="checkbox"
+                      checked={!darkMode}
+                      onChange={() => setDarkMode(false)}
+                    />
+                    <span className="slider"></span>
+                  </label>
                 </div>
-                <label className="switch">
-                  <input
-                    type="checkbox"
-                    checked={emailNotifs}
-                    onChange={() => setEmailNotifs(!emailNotifs)}
-                  />
-                  <span className="slider"></span>
-                </label>
-              </div>
-              <hr />
-              <div className="toggle-row">
-                <div className="toggle-label-group">
-                  <p className="toggle-title">Push Notifications</p>
-                  <p className="toggle-desc">Instant alerts on your device</p>
+
+                <div className="toggle-row dimmed">
+                  <div className="toggle-label-group">
+                    <p className="toggle-title">Dark Mode</p>
+                    <p className="toggle-desc">Easier on the eyes</p>
+                  </div>
+                  <label className="switch">
+                    <input
+                      type="checkbox"
+                      checked={darkMode}
+                      onChange={() => setDarkMode(true)}
+                    />
+                    <span className="slider"></span>
+                  </label>
                 </div>
-                <label className="switch">
-                  <input
-                    type="checkbox"
-                    checked={pushNotifs}
-                    onChange={() => setPushNotifs(!pushNotifs)}
-                  />
-                  <span className="slider"></span>
-                </label>
-              </div>
-            </section>
+              </section>
+
+              <section className="settings-card">
+                <h3>Notifications</h3>
+                <p className="card-subtitle">Manage your alerts.</p>
+
+                <div className="toggle-row">
+                  <div className="toggle-label-group">
+                    <p className="toggle-title">Email Notifications</p>
+                    <p className="toggle-desc">Daily digests and updates</p>
+                  </div>
+                  <label className="switch">
+                    <input
+                      type="checkbox"
+                      checked={emailNotifs}
+                      onChange={() => setEmailNotifs(!emailNotifs)}
+                    />
+                    <span className="slider"></span>
+                  </label>
+                </div>
+                <hr />
+                <div className="toggle-row">
+                  <div className="toggle-label-group">
+                    <p className="toggle-title">Push Notifications</p>
+                    <p className="toggle-desc">Instant alerts on your device</p>
+                  </div>
+                  <label className="switch">
+                    <input
+                      type="checkbox"
+                      checked={pushNotifs}
+                      onChange={() => setPushNotifs(!pushNotifs)}
+                    />
+                    <span className="slider"></span>
+                  </label>
+                </div>
+              </section>
+            </div>
           </div>
-        </div>
+        </main>
       </div>
-    </>
+    </div>
   );
 }
 

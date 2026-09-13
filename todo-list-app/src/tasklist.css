@@ -425,6 +425,65 @@ body {
     font-weight: 600;
 }
 
+body.dark-mode {
+    background: #191c1e;
+    color: #e0e3e5;
+}
+
+body.dark-mode .sidebar {
+    background: #232629;
+    border-right-color: #434655;
+}
+
+body.dark-mode .sidebar-brand p {
+    color: #9aa0a6;
+}
+
+body.dark-mode .nav-item {
+    color: #c3c6d7;
+}
+
+body.dark-mode .nav-item:hover {
+    background: #2d3133;
+}
+
+body.dark-mode .nav-item.active {
+    background: #003ea8;
+    color: #fff;
+}
+
+body.dark-mode .topbar {
+    background: #232629;
+    border-bottom-color: #434655;
+}
+
+body.dark-mode .search-input {
+    background: #191c1e;
+    border-color: #434655;
+    color: #e0e3e5;
+}
+
+body.dark-mode .page-heading h2,
+body.dark-mode .settings-heading h1 {
+    color: #fff;
+}
+
+body.dark-mode .task-card,
+body.dark-mode .settings-card {
+    background: #232629;
+    border-color: #434655;
+}
+
+body.dark-mode .task-title {
+    color: #e0e3e5;
+}
+
+body.dark-mode .filter-select {
+    background: #232629;
+    border-color: #434655;
+    color: #c3c6d7;
+}
+
 @media (max-width: 700px) {
     .sidebar {
         display: none;

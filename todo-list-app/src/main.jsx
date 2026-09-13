@@ -14,7 +14,7 @@ const router = createBrowserRouter([
   {
     path: '/',
     // element: <TodoList />
-     element: <TaskList />
+    element: <TaskList />
   },
   {
     path: '/login',
@@ -25,14 +25,21 @@ const router = createBrowserRouter([
     element: <SignUp />
   },
   {
-    path:'/profile',
-    element:<Profile/>
+    path: '/profile',
+    element: <Profile />
   },
-   {
-    path:'/settings',
-    element:<Settings/>
+  {
+    path: '/settings',
+    element: <Settings />
+  },
+  {
+    path: '/dashboard',
+    element: <Dashboard />
   }
 ]);
+if (localStorage.getItem('darkMode') === 'true') {
+  document.body.classList.add('dark-mode');
+}
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
