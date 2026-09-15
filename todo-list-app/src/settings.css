@@ -55,7 +55,6 @@
     gap: 24px;
 }
 
-/* Profile form */
 .profile-form {
     display: flex;
     gap: 24px;
@@ -183,7 +182,7 @@
     cursor: not-allowed;
 }
 
-/* Toggles */
+
 .toggle-row {
     display: flex;
     justify-content: space-between;

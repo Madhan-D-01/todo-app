@@ -10,6 +10,7 @@ import Profile from './Profile.jsx'
 import TaskList from './TaskList.jsx'
 import Settings from './Settings.jsx'
 import Dashboard from './Dashboard.jsx'
+import Calender from './Calender.jsx'
 
 const router = createBrowserRouter([
   {
@@ -36,6 +37,10 @@ const router = createBrowserRouter([
   {
     path: '/dashboard',
     element: <Dashboard />
+  },
+  {
+    path: '/calendar',
+    element: <Calender />
   }
 ]);
 if (localStorage.getItem('darkMode') === 'true') {

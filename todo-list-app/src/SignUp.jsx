@@ -1,6 +1,6 @@
 import React from 'react'
 import { useState } from 'react';
-import './register.css'
+import './auth.css'
 import { Link, useNavigate } from "react-router-dom";
 
 const API_URL = 'http://localhost:8090/api/v1/users';
@@ -16,9 +16,8 @@ function SignUp() {
   const navigate = useNavigate();
 
   const handlesignup = async (e) => {
-    e.preventDefault(),
-
-      setError('')
+    e.preventDefault();
+    setError('');
     setLoading(true);
 
     try {
@@ -32,11 +31,10 @@ function SignUp() {
           email: useremail,
           password: userpassword,
         }),
-
       });
       const data = await response.json();
       if (!response.ok) {
-        const message = data.message || Object.values(data.errors || {})[0] || "Registration failed";;
+        const message = data.message || Object.values(data.errors || {})[0] || "Registration failed";
         throw new Error(message);
       }
 
@@ -45,71 +43,66 @@ function SignUp() {
     }
     catch (error) {
       console.error("Signup Error", error);
-      setError(error.message||"Unable to register, Please Try Again");
+      setError(error.message || "Unable to register, Please Try Again");
     }
     finally {
       setLoading(false);
     }
-
   }
 
   return (
-    <div>
-      <div className="container">
-        <div className="login-box">
-          <h2>SignUp</h2>
-          <form onSubmit={handlesignup}>
-            <div>
-              <input type="text"
-                onChange={(e) => setUsername(e.target.value)}
-                value={username} placeholder="Enter your name" required />
-            </div>
-            <div>
-              <input type="email"
-                onChange={(e) => setUseremail(e.target.value)}
-                value={useremail} placeholder="Enter your email" required />
-            </div>
-            <div className="password-field">
-              <input
-                type={showpassword ? "text" : "password"}
-                onChange={(e) => setUserpassword(e.target.value)}
-                value={userpassword}
-                placeholder="Enter your Password" required
-              />
-
-              <button
-                type="button"
-                onClick={() => setShowpassword(!showpassword)}
-              >
-                {showpassword ? (
-                  <i className="bi bi-eye-slash"></i>
-                ) : (
-                  <i className="bi bi-eye"></i>
-                )}
-              </button>
-            </div>
-
-            {error && (
-              <p style={{ color: "red" }}>
-                {error}
-              </p>
-            )}
-
-            <div>
-              <button type="submit" className="btn btn-danger" disabled={loading} >{loading ? "Signing up..." : "Signup"}
-              </button>
-            </div>
-          </form>
-          <div className="signup-text">
-            <p>If you have an account </p>
-            <Link to="/login">Login</Link>
+    <div className="auth-container">
+      <div className="auth-box">
+        <div className="auth-brand">
+          <h1>TaskMaster Pro</h1>
+          <p>Productivity Workspace</p>
+        </div>
+        <h2>Create your account</h2>
+        <form onSubmit={handlesignup}>
+          <div>
+            <input type="text"
+              onChange={(e) => setUsername(e.target.value)}
+              value={username} placeholder="Choose a username" required />
+          </div>
+          <div>
+            <input type="email"
+              onChange={(e) => setUseremail(e.target.value)}
+              value={useremail} placeholder="Enter your email" required />
+          </div>
+          <div className="password-field">
+            <input
+              type={showpassword ? "text" : "password"}
+              onChange={(e) => setUserpassword(e.target.value)}
+              value={userpassword}
+              placeholder="Create a password (min. 8 characters)" required
+            />
+            <button
+              type="button"
+              onClick={() => setShowpassword(!showpassword)}
+            >
+              {showpassword ? (
+                <i className="bi bi-eye-slash"></i>
+              ) : (
+                <i className="bi bi-eye"></i>
+              )}
+            </button>
           </div>
 
+          {error && (
+            <p className="auth-error">{error}</p>
+          )}
+
+          <button type="submit" className="btn" disabled={loading}>
+            {loading ? "Signing up..." : "Sign up"}
+          </button>
+        </form>
+        <div className="auth-switch">
+          <span>Already have an account?</span>
+          <Link to="/login">Log in</Link>
         </div>
       </div>
-
     </div>
-  )
+  );
 }
 
 export default SignUp

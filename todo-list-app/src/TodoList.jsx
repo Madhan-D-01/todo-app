@@ -89,7 +89,6 @@ function TodoList() {
         init();
     }, [])
 
-    // Get tasks from Spring Boot when the component loads
     const fetchTodos = async (headers) => {
         const authHeaders = headers || getAuthHeaders();
         if (!authHeaders) return;
@@ -106,7 +105,7 @@ function TodoList() {
             console.error("Error fetching tasks", error);
         }
     };
-    // Add task
+
     const handleAdd = async () => {
         if (!input.trim()) return;
         if (!startDate || !endDate) {
@@ -151,7 +150,7 @@ function TodoList() {
             console.error('Error creating task:', error);
         }
     };
-    // Complete / Undo task
+
 
     const handleToggle = async (id) => {
         const todo = todos.find((todo) => todo.id === id);
@@ -193,8 +192,6 @@ function TodoList() {
             console.error("Error updating task:", error);
         }
     };
-
-    // Delete task
 
     const handleDelete = async (id) => {
         const headers = getAuthHeaders();
@@ -323,5 +320,4 @@ function TodoList() {
         </>
     );
 }
-
 export default TodoList;
