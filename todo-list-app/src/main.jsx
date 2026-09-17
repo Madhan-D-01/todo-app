@@ -11,6 +11,7 @@ import TaskList from './TaskList.jsx'
 import Settings from './Settings.jsx'
 import Dashboard from './Dashboard.jsx'
 import Calender from './Calender.jsx'
+import { ThemeProvider } from './ThemeContext.jsx'
 
 const router = createBrowserRouter([
   {
@@ -43,12 +44,11 @@ const router = createBrowserRouter([
     element: <Calender />
   }
 ]);
-if (localStorage.getItem('darkMode') === 'true') {
-  document.body.classList.add('dark-mode');
-}
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <RouterProvider router={router} />
+   <ThemeProvider>
+      <RouterProvider router={router} />
+    </ThemeProvider>
   </StrictMode>
 )

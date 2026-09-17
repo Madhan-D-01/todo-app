@@ -19,5 +19,8 @@ public class UserResponse {
 	private String firstName;
 	private String lastName;
 	private String avatarUrl;
+	private Boolean darkMode;
+	private Boolean emailNotifications;
+	private Boolean pushNotifications;
 
 }

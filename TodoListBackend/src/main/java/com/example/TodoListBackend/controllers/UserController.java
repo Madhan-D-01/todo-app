@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.TodoListBackend.dto.LoginRequest;
 import com.example.TodoListBackend.dto.LoginResponse;
+import com.example.TodoListBackend.dto.UpdatePreferencesRequest;
 import com.example.TodoListBackend.dto.UpdateProfileRequest;
 import com.example.TodoListBackend.dto.UserResponse;
 import com.example.TodoListBackend.models.User;
@@ -40,7 +41,10 @@ public class UserController {
 				user.getEmail(),
 				user.getFirstName(),
 				user.getLastName(),
-				user.getAvatarUrl()
+				user.getAvatarUrl(),
+				user.getDarkMode(),
+				user.getEmailNotifications(),
+				user.getPushNotifications()
 				);
 	}
 
@@ -88,6 +92,13 @@ public class UserController {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		String username = (String) auth.getPrincipal();
 		User updated = userService.updateProfile(username, request);
+		return new ResponseEntity<>(toResponse(updated), HttpStatus.OK);
+	}
+	@PutMapping("/me/preferences")
+	public ResponseEntity<UserResponse> updatePreferences(@RequestBody UpdatePreferencesRequest request) {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		String username = (String) auth.getPrincipal();
+		User updated = userService.updatePreferences(username, request);
 		return new ResponseEntity<>(toResponse(updated), HttpStatus.OK);
 	}
 }

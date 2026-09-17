@@ -14,7 +14,8 @@ function Settings() {
 
   const [emailNotifs, setEmailNotifs] = useState(true);
   const [pushNotifs, setPushNotifs] = useState(false);
-  const [darkMode, setDarkMode] = useState(() => localStorage.getItem('darkMode') === 'true');
+  const [darkMode, setDarkMode] = useState(false);
+  const [prefsSaving, setPrefsSaving] = useState(false);
 
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -57,6 +58,10 @@ function Settings() {
         setLastName(data.lastName || '');
         setEmail(data.email || '');
         setAvatarUrl(data.avatarUrl || '');
+        setDarkMode(!!data.darkMode);
+        setEmailNotifs(data.emailNotifications !== false);
+        setPushNotifs(!!data.pushNotifications);
+        document.body.classList.toggle('dark-mode', !!data.darkMode);
       } catch (err) {
         console.error("Profile fetch error", err);
         setError("Unable to load profile");
@@ -67,10 +72,23 @@ function Settings() {
     fetchProfile();
   }, []);
 
-  useEffect(() => {
-    document.body.classList.toggle('dark-mode', darkMode);
-    localStorage.setItem('darkMode', darkMode);
-  }, [darkMode]);
+  const savePreferences = async (next) => {
+    document.body.classList.toggle('dark-mode', next.darkMode);
+    setPrefsSaving(true);
+    const headers = getAuthHeaders();
+    if (!headers) return;
+    try {
+      await fetch(`${API_URL}/me/preferences`, {
+        method: "PUT",
+        headers,
+        body: JSON.stringify(next)
+      });
+    } catch (err) {
+      console.error("Failed to save preferences", err);
+    } finally {
+      setPrefsSaving(false);
+    }
+  };
 
   const handleSave = async (e) => {
     e.preventDefault();
@@ -199,7 +217,11 @@ function Settings() {
                     <input
                       type="checkbox"
                       checked={!darkMode}
-                      onChange={() => setDarkMode(false)}
+                      onChange={() => {
+                        const next = { darkMode: false, emailNotifications: emailNotifs, pushNotifications: pushNotifs };
+                        setDarkMode(false);
+                        savePreferences(next);
+                      }}
                     />
                     <span className="slider"></span>
                   </label>
@@ -214,7 +236,11 @@ function Settings() {
                     <input
                       type="checkbox"
                       checked={darkMode}
-                      onChange={() => setDarkMode(true)}
+                      onChange={() => {
+                        const next = { darkMode: true, emailNotifications: emailNotifs, pushNotifications: pushNotifs };
+                        setDarkMode(true);
+                        savePreferences(next);
+                      }}
                     />
                     <span className="slider"></span>
                   </label>
@@ -234,7 +260,12 @@ function Settings() {
                     <input
                       type="checkbox"
                       checked={emailNotifs}
-                      onChange={() => setEmailNotifs(!emailNotifs)}
+                      onChange={() => {
+                        const nextVal = !emailNotifs;
+                        const next = { darkMode, emailNotifications: nextVal, pushNotifications: pushNotifs };
+                        setEmailNotifs(nextVal);
+                        savePreferences(next);
+                      }}
                     />
                     <span className="slider"></span>
                   </label>
@@ -249,7 +280,12 @@ function Settings() {
                     <input
                       type="checkbox"
                       checked={pushNotifs}
-                      onChange={() => setPushNotifs(!pushNotifs)}
+                      onChange={() => {
+                        const nextVal = !pushNotifs;
+                        const next = { darkMode, emailNotifications: emailNotifs, pushNotifications: nextVal };
+                        setPushNotifs(nextVal);
+                        savePreferences(next);
+                      }}
                     />
                     <span className="slider"></span>
                   </label>

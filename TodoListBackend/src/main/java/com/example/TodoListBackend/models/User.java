@@ -37,6 +37,9 @@ public class User {
 	private String firstName;
 	private String lastName;
 	private String avatarUrl;
+	private Boolean darkMode;
+	private Boolean emailNotifications;
+	private Boolean pushNotifications;
 
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Task> tasks;
