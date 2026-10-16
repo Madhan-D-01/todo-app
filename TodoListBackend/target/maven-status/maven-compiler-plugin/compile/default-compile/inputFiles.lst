@@ -4,7 +4,13 @@ C:\Coding\Todo-App\TodoListBackend\src\main\java\com\example\TodoListBackend\dto
 C:\Coding\Todo-App\TodoListBackend\src\main\java\com\example\TodoListBackend\dto\LoginResponse.java
 C:\Coding\Todo-App\TodoListBackend\src\main\java\com\example\TodoListBackend\dto\TaskRequest.java
 C:\Coding\Todo-App\TodoListBackend\src\main\java\com\example\TodoListBackend\dto\TaskResponse.java
+C:\Coding\Todo-App\TodoListBackend\src\main\java\com\example\TodoListBackend\dto\UpdatePreferencesRequest.java
+C:\Coding\Todo-App\TodoListBackend\src\main\java\com\example\TodoListBackend\dto\UpdateProfileRequest.java
 C:\Coding\Todo-App\TodoListBackend\src\main\java\com\example\TodoListBackend\dto\UserResponse.java
+C:\Coding\Todo-App\TodoListBackend\src\main\java\com\example\TodoListBackend\exceptions\DuplicateResourceException.java
+C:\Coding\Todo-App\TodoListBackend\src\main\java\com\example\TodoListBackend\exceptions\GlobalExceptionHandler.java
+C:\Coding\Todo-App\TodoListBackend\src\main\java\com\example\TodoListBackend\exceptions\ResourceNotFoundException.java
+C:\Coding\Todo-App\TodoListBackend\src\main\java\com\example\TodoListBackend\models\Priority.java
 C:\Coding\Todo-App\TodoListBackend\src\main\java\com\example\TodoListBackend\models\Task.java
 C:\Coding\Todo-App\TodoListBackend\src\main\java\com\example\TodoListBackend\models\User.java
 C:\Coding\Todo-App\TodoListBackend\src\main\java\com\example\TodoListBackend\repositories\TaskRepository.java
