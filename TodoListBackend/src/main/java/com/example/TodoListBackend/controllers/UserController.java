@@ -36,16 +36,9 @@ public class UserController {
 	private JwtUtil jwtUtil;
 
 	private UserResponse toResponse(User user) {
-		return new UserResponse(user.getId(),
-				user.getUsername(),
-				user.getEmail(),
-				user.getFirstName(),
-				user.getLastName(),
-				user.getAvatarUrl(),
-				user.getDarkMode(),
-				user.getEmailNotifications(),
-				user.getPushNotifications()
-				);
+		return new UserResponse(user.getId(), user.getUsername(), user.getEmail(), user.getFirstName(),
+				user.getLastName(), user.getAvatarUrl(), user.getDarkMode(), user.getEmailNotifications(),
+				user.getPushNotifications());
 	}
 
 	@PostMapping("/register")
@@ -78,15 +71,16 @@ public class UserController {
 		return new ResponseEntity<>(new LoginResponse(token, user.get().getEmail()), HttpStatus.OK);
 
 	}
+
 	@GetMapping("/me")
 	public ResponseEntity<UserResponse> getCurrentUser() {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		String username = (String) auth.getPrincipal();
 
-		return userService.getUserByUserName(username)
-				.map(u -> new ResponseEntity<>(toResponse(u), HttpStatus.OK))
+		return userService.getUserByUserName(username).map(u -> new ResponseEntity<>(toResponse(u), HttpStatus.OK))
 				.orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
 	}
+
 	@PutMapping("/me")
 	public ResponseEntity<UserResponse> updateProfile(@Valid @RequestBody UpdateProfileRequest request) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -94,6 +88,7 @@ public class UserController {
 		User updated = userService.updateProfile(username, request);
 		return new ResponseEntity<>(toResponse(updated), HttpStatus.OK);
 	}
+
 	@PutMapping("/me/preferences")
 	public ResponseEntity<UserResponse> updatePreferences(@RequestBody UpdatePreferencesRequest request) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -102,4 +97,3 @@ public class UserController {
 		return new ResponseEntity<>(toResponse(updated), HttpStatus.OK);
 	}
 }
-
